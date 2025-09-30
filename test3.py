@@ -151,7 +151,7 @@ print("Confusion Matrix:")
 print(confusion_matrix(y_true_classes, y_pred_classes))
 
 # Save model if performance is reasonable
-if test_accuracy > 0.6:
+if test_accuracy > 0.85:
     model.save("model001.h5")
     print("✅ Model saved successfully!")
 else:
@@ -179,5 +179,3 @@ plt.legend()
 plt.tight_layout()
 plt.savefig('training_history.png')
 plt.show()
-
-print("\n=== TRAINING COMPLETED ===")

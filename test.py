@@ -3,10 +3,10 @@ import numpy as np
 from tensorflow.keras.models import load_model
 
 # Load the trained face recognition model
-model = load_model("face_recognition_model.h5")
+model = load_model("model001.h5")
 
 
-labels = ["Kb","kin"]
+labels = ["Kb","kin","ryk"]
 
 cap = cv2.VideoCapture(0)
 

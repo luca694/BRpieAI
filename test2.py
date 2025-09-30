@@ -21,7 +21,6 @@ print(f"Training samples: {len(X_train)}")
 print(f"Test samples: {len(X_test)}")
 print(f"Number of classes: {num_classes}")
 
-# Data augmentation
 datagen = ImageDataGenerator(
     rotation_range=30,
     width_shift_range=0.2,
@@ -59,6 +58,11 @@ model.compile(
     metrics=["accuracy"]
 )
 
+early_stopping = EarlyStopping(
+    monitor='val_loss',
+    patience=15,
+    restore_best_weights=True
+)
 
 reduce_lr = ReduceLROnPlateau(
     monitor='val_loss',
@@ -67,7 +71,7 @@ reduce_lr = ReduceLROnPlateau(
     min_lr=0.00001
 )
 
-batch_size = 2
+batch_size = 3
 epochs = 100
 
 history = model.fit(

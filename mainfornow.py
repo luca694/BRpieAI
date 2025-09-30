@@ -26,7 +26,6 @@ print(f"Training samples: {len(X_train)}")
 print(f"Test samples: {len(X_test)}")
 print(f"Number of classes: {num_classes}")
 
-# Data augmentation for grayscale images
 datagen = ImageDataGenerator(
     rotation_range=20,
     width_shift_range=0.1,
