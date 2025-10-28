@@ -2,7 +2,6 @@ import cv2
 import numpy as np
 from tensorflow.keras.models import load_model
 
-# Load the trained face recognition model
 model = load_model("model001.h5")
 
 
@@ -45,10 +44,10 @@ while True:
         class_id = np.argmax(predictions)
         confidence = np.max(predictions)
 
-        # Get label
+        
         name = labels[class_id]
 
-        # Put text above face
+        
         cv2.putText(res, f"{name} ({confidence:.2f})", (x, y-10),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
 

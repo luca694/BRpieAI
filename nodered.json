@@ -1,0 +1,501 @@
+[
+    {
+        "id": "5d7f843896f5f03d",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "1afa4be802726f48",
+        "type": "inject",
+        "z": "5d7f843896f5f03d",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 180,
+        "y": 240,
+        "wires": [
+            [
+                "9e7e1ac30326249a"
+            ]
+        ]
+    },
+    {
+        "id": "9e7e1ac30326249a",
+        "type": "function",
+        "z": "5d7f843896f5f03d",
+        "name": "function 1",
+        "func": "var imageData = [];\n\nfor (var i = 0; i < 100; i++) {\n    var row = [];\n    for (var j = 0; j < 100; j++) {\n        row.push(0.5);\n    }\n    imageData.push(row);\n}\n\nmsg.payload = {\n    \"input\": imageData\n};\nmsg.headers = {\n    'Content-Type': 'application/json'\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 240,
+        "wires": [
+            [
+                "da4945fa6c76a3c7"
+            ]
+        ]
+    },
+    {
+        "id": "da4945fa6c76a3c7",
+        "type": "http request",
+        "z": "5d7f843896f5f03d",
+        "name": "",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://localhost:5000/predict",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 550,
+        "y": 240,
+        "wires": [
+            [
+                "f67bac0c6ffb0514"
+            ]
+        ]
+    },
+    {
+        "id": "4f12bcc407882c99",
+        "type": "debug",
+        "z": "5d7f843896f5f03d",
+        "name": "debug 1",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "f67bac0c6ffb0514",
+        "type": "function",
+        "z": "5d7f843896f5f03d",
+        "name": "function 2",
+        "func": "// Add this after HTTP request node to see the actual response\nconsole.log(\"FULL RESPONSE:\", JSON.stringify(msg.payload, null, 2));\nnode.warn(\"AI Response: \" + JSON.stringify(msg.payload));\n\n// Pass through to debug node\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 740,
+        "y": 240,
+        "wires": [
+            [
+                "4f12bcc407882c99"
+            ]
+        ]
+    },
+    {
+        "id": "172bd486cf877b8b",
+        "type": "http in",
+        "z": "5d7f843896f5f03d",
+        "name": "in",
+        "url": "/process-face",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 320,
+        "wires": [
+            [
+                "c7327ae4723efc63"
+            ]
+        ]
+    },
+    {
+        "id": "23867fe9f74e5199",
+        "type": "template",
+        "z": "5d7f843896f5f03d",
+        "name": "mhtml",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Sign In</title>\n    <style>\n        body {\n            background-color: rgb(255, 255, 255);\n            margin:0;\n            padding:0;\n        }\n\n        .menu{\n            position: fixed; \n            top: 0;              \n            left: 0;           \n            width: 100%;          \n            padding: 14px 16px 10px;\n            overflow: hidden;\n            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);\n            z-index: 1000;    \n            background-color: white; \n            text-align: center;\n        }\n\n        a {\n            text-decoration: none;\n        }\n\n        p {\n            font-family: 'Courier New', Courier, monospace;\n            font-style: italic;\n        }\n\n        h1 {\n            font-size: medium;\n            letter-spacing: 0.04cm;\n        }\n\n        button {\n            margin: 0;\n            padding: 0;\n            display: inline-block;\n        }\n\n        .btn, .btn-1 {\n            display: inline-block;\n            padding: 7px 34px;\n            margin: 4px;\n            color: white;\n            border-radius: 7px;\n            letter-spacing:0.07cm;\n            transition: \n                transform 0.3s ease,\n                background-color 0.3s ease,\n                letter-spacing 0.3s ease;\n        }\n\n        .btn{\n            background-color: rgb(20, 24, 83);\n        }\n\n        .btn-1{\n            background-color: rgb(123, 20, 20);\n        }\n\n        .btn:hover,.btn-1:hover {\n            background-color: rgb(18, 17, 17);\n            cursor: pointer;\n            letter-spacing: 0.16cm;\n        }\n\n        .center-layer {\n            display: flex;\n            flex-direction: column; \n            justify-content: center; \n            align-items: center; \n            text-align: center; \n            min-height: 100vh;\n        }\n\n        .center {\n            display: flex;\n            justify-content: center;\n        }\n\n        .cam {\n            display:inline-block;\n            margin-left: 100px;\n        }\n\n        .cam {\n            padding-left: 60px;\n            padding-top: 60px;\n            margin: 20px auto; \n            width: 500px;       \n            max-width: 90vw; \n        }\n\n        .cam video {\n            width: 100%;\n            height: 325px;\n            border: 2px solid #c4c4c6; \n            border-radius: 5px;  \n            object-fit: cover;\n            transform: scaleX(-1); \n            display: block; \n        }\n    </style>\n</head>\n<body>\n    <div class=\"menu\">\n        <h1>FACE RECOGNITION - REGISTER</h1>\n    </div>\n\n    <div class=\"cam\">\n        <video id=\"video\" width=\"360\" height=\"360\" autoplay></video>\n        <br>\n        <button onclick=\"captureForSignIn()\" class=\"btn\" style=\"margin-top: 20px;\">\n            SIGN IN WITH FACE\n        </button>\n    </div>\n\n    <script>\n        const video = document.getElementById('video');\n\n        // Access camera\n        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {\n            navigator.mediaDevices.getUserMedia({ video: true })\n                .then(stream => {\n                    video.srcObject = stream;\n                })\n                .catch(err => {\n                    console.error(\"Error accessing camera:\", err);\n                    alert(\"Error accessing camera. Please allow camera permissions.\");\n                });\n        }\n\n        async function captureForSignIn() {\n            try {\n                // Capture image from camera\n                const canvas = document.createElement('canvas');\n                const context = canvas.getContext('2d');\n                canvas.width = video.videoWidth;\n                canvas.height = video.videoHeight;\n                context.drawImage(video, 0, 0);\n                \n                // Convert to base64\n                const imageData = canvas.toDataURL('image/jpeg');\n                \n                // Show loading state\n                const button = document.querySelector('.btn');\n                button.textContent = \"PROCESSING...\";\n                button.disabled = true;\n                \n                // Send to Node-RED AI endpoint\n                const response = await fetch('/process-face', {\n                    method: 'POST',\n                    headers: {\n                        'Content-Type': 'application/json',\n                    },\n                    body: JSON.stringify({\n                        image: imageData\n                    })\n                });\n                \n                const result = await response.json();\n                \n                // Reset button\n                button.textContent = \"SIGN IN WITH FACE\";\n                button.disabled = false;\n                \n                if (result.success && result.recognized) {\n                    alert(`SUCCESS! Welcome user ${result.user_id}\\nConfidence: ${result.confidence}`);\n                    // Redirect or do something on success\n                } else {\n                    alert('Face not recognized. Please try again.');\n                }\n                \n            } catch (error) {\n                console.error('Error:', error);\n                alert('Error processing face. Please try again.');\n                \n                // Reset button on error too\n                const button = document.querySelector('.btn');\n                button.textContent = \"SIGN IN WITH FACE\";\n                button.disabled = false;\n            }\n        }\n    </script>\n</body>\n</html>",
+        "output": "str",
+        "x": 730,
+        "y": 880,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "564378b5a54a7dd9",
+        "type": "http response",
+        "z": "5d7f843896f5f03d",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 550,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "33e9cddce217e424",
+        "type": "http in",
+        "z": "5d7f843896f5f03d",
+        "name": "",
+        "url": "/sign-in",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 190,
+        "y": 480,
+        "wires": [
+            [
+                "5a02900bc16bbc0f"
+            ]
+        ]
+    },
+    {
+        "id": "c7327ae4723efc63",
+        "type": "function",
+        "z": "5d7f843896f5f03d",
+        "name": "function 3",
+        "func": "// Function 3 - Prepare for Python\nmsg.headers = {\n    'Content-Type': 'application/json'\n};\nmsg.payload = {\n    image: msg.req.body.image  // Make sure it's 'image' not 'input'\n};\n\nnode.warn(\"Sending to Python: http://localhost:5000/process-face\");\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 320,
+        "wires": [
+            [
+                "69a953b64655a00f"
+            ]
+        ]
+    },
+    {
+        "id": "69a953b64655a00f",
+        "type": "http request",
+        "z": "5d7f843896f5f03d",
+        "name": "",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://localhost:5000/process-face",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 590,
+        "y": 320,
+        "wires": [
+            [
+                "2e757bbea3d9fe04",
+                "8392ab65f9460151"
+            ]
+        ]
+    },
+    {
+        "id": "236a70efe732231f",
+        "type": "function",
+        "z": "5d7f843896f5f03d",
+        "name": "function 4",
+        "func": "// Function 4 - Combine Results\nnode.warn(\"=== FUNCTION 4 START ===\");\nnode.warn(\"pythonResponse: \" + JSON.stringify(msg.pythonResponse));\nnode.warn(\"user_data: \" + JSON.stringify(msg.user_data));\n\nif (msg.pythonResponse && msg.pythonResponse.success && msg.pythonResponse.recognized && msg.user_data) {\n    msg.payload = {\n        success: true,\n        recognized: true,  // ← THIS MUST BE TRUE\n        confidence: msg.pythonResponse.confidence,\n        user_id: msg.user_data.user_id,\n        user_name: msg.user_data.user_name,\n        user_st: msg.user_data.user_st,\n        grade: msg.user_data.grade,\n        class: msg.user_data.class || \"N/A\",\n        last_scan: msg.user_data.last_scan,\n        avatar_color: msg.user_data.avatar_color\n    };\n    node.warn(\"✅ SUCCESS - Face recognized and data combined\");\n} else {\n    msg.payload = {\n        success: true,\n        recognized: false,  // ← This is causing the error\n        confidence: msg.pythonResponse ? msg.pythonResponse.confidence : 0,\n        error: \"Face not recognized\"\n    };\n    node.warn(\"❌ FAILED - Face not recognized\");\n}\n\nnode.warn(\"Final response: \" + JSON.stringify(msg.payload));\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1220,
+        "y": 320,
+        "wires": [
+            [
+                "69dc60473d1c61bd",
+                "6ef1e3e3ea62d6a6"
+            ]
+        ]
+    },
+    {
+        "id": "69dc60473d1c61bd",
+        "type": "http response",
+        "z": "5d7f843896f5f03d",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1410,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "5a02900bc16bbc0f",
+        "type": "template",
+        "z": "5d7f843896f5f03d",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Sign In</title>\n    <style>\n        body {\n            background-color: rgb(255, 255, 255);\n            margin: 0;\n            padding: 0;\n            display: flex;\n            flex-direction: column;\n        }\n\n        .menu {\n            position: fixed; \n            top: 0;              \n            left: 0;           \n            width: 100%;          \n            padding: 14px 16px 10px;\n            overflow: hidden;\n            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);\n            z-index: 1000;    \n            background-color: white; \n            text-align: center;\n        }\n\n        .main-container {\n            display: flex;\n            margin-top: 80px;\n            min-height: calc(100vh - 80px);\n            width: 100%;\n        }\n\n        .camera-section {\n            flex: 1;\n            padding: 20px;\n            display: flex;\n            flex-direction: column;\n            align-items: center;\n            justify-content: center;\n        }\n\n        .info-section {\n            flex: 1;\n            padding: 20px;\n            background-color: #f8f9fa;\n            border-left: 2px solid #e9ecef;\n            display: flex;\n            flex-direction: column;\n        }\n\n        .cam video {\n            width: 100%;\n            max-width: 500px;\n            height: 325px;\n            border: 2px solid #c4c4c6; \n            border-radius: 5px;  \n            object-fit: cover;\n            transform: scaleX(-1); \n            display: block; \n            margin: 0 auto;\n        }\n\n        .btn {\n            display: inline-block;\n            padding: 7px 34px;\n            margin: 4px;\n            color: white;\n            border-radius: 7px;\n            letter-spacing: 0.07cm;\n            background-color: rgb(20, 24, 83);\n            transition: all 0.3s ease;\n            margin-top: 20px;\n            border: none;\n            cursor: pointer;\n            font-size: 16px;\n        }\n\n        .btn:hover {\n            background-color: rgb(18, 17, 17);\n            cursor: pointer;\n            letter-spacing: 0.16cm;\n        }\n\n        .btn:disabled {\n            background-color: #6c757d;\n            cursor: not-allowed;\n            letter-spacing: 0.07cm;\n        }\n\n        .info-panel {\n            background: white;\n            border-radius: 10px;\n            padding: 20px;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n            margin-bottom: 20px;\n        }\n\n        .info-title {\n            font-size: 1.2em;\n            font-weight: bold;\n            color: #2c3e50;\n            margin-bottom: 15px;\n            border-bottom: 2px solid #3498db;\n            padding-bottom: 5px;\n        }\n\n        .info-item {\n            margin: 10px 0;\n            padding: 8px;\n            background: #f8f9fa;\n            border-radius: 5px;\n            border-left: 4px solid #3498db;\n        }\n\n        .info-label {\n            font-weight: bold;\n            color: #2c3e50;\n        }\n\n        .info-value {\n            color: #7f8c8d;\n        }\n\n        .status-indicator {\n            padding: 10px;\n            border-radius: 5px;\n            text-align: center;\n            font-weight: bold;\n            margin: 10px 0;\n        }\n\n        .status-waiting {\n            background-color: #fff3cd;\n            color: #856404;\n            border: 1px solid #ffeaa7;\n        }\n\n        .status-success {\n            background-color: #d1ecf1;\n            color: #0c5460;\n            border: 1px solid #bee5eb;\n        }\n\n        .status-error {\n            background-color: #f8d7da;\n            color: #721c24;\n            border: 1px solid #f5c6cb;\n        }\n\n        .user-avatar {\n            width: 100px;\n            height: 100px;\n            border-radius: 50%;\n            background: #3498db;\n            margin: 0 auto 15px;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            color: white;\n            font-size: 2em;\n            font-weight: bold;\n            transition: background-color 0.3s ease;\n        }\n\n        .confidence-bar {\n            height: 20px;\n            background: #ecf0f1;\n            border-radius: 10px;\n            margin: 10px 0;\n            overflow: hidden;\n        }\n\n        .confidence-fill {\n            height: 100%;\n            background: linear-gradient(90deg, #2ecc71, #27ae60);\n            transition: width 0.5s ease;\n        }\n\n        .cam {\n            text-align: center;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"menu\">\n        <h1>FACE RECOGNITION - REGISTER</h1>\n    </div>\n\n    <div class=\"main-container\">\n        <div class=\"camera-section\">\n            <div class=\"cam\">\n                <video id=\"video\" width=\"360\" height=\"360\" autoplay></video>\n                <br>\n                <button onclick=\"captureForSignIn()\" class=\"btn\">SIGN IN WITH FACE</button>\n            </div>\n        </div>\n\n        <div class=\"info-section\">\n            <!-- User Information Panel -->\n            <div class=\"info-panel\">\n                <div class=\"info-title\">Student Information</div>\n                <div id=\"userInfo\">\n                    <div class=\"status-indicator status-waiting\" id=\"statusIndicator\">\n                        Waiting for face recognition...\n                    </div>\n                    <div class=\"user-avatar\" id=\"userAvatar\">?</div>\n                    \n                    <div class=\"info-item\">\n                        <span class=\"info-label\">Student ID:</span>\n                        <span class=\"info-value\" id=\"userSt\">-</span>\n                    </div>\n                    <div class=\"info-item\">\n                        <span class=\"info-label\">Name:</span>\n                        <span class=\"info-value\" id=\"userName\">-</span>\n                    </div>\n                    <div class=\"info-item\">\n                        <span class=\"info-label\">Grade:</span>\n                        <span class=\"info-value\" id=\"userGrade\">-</span>\n                    </div>\n                    <div class=\"info-item\">\n                        <span class=\"info-label\">Class:</span>\n                        <span class=\"info-value\" id=\"userClass\">-</span>\n                    </div>\n                    <div class=\"info-item\">\n                        <span class=\"info-label\">Last Scan:</span>\n                        <span class=\"info-value\" id=\"lastScan\">-</span>\n                    </div>\n                </div>\n            </div>\n\n            <!-- Recognition Results Panel -->\n            <div class=\"info-panel\">\n                <div class=\"info-title\">Recognition Results</div>\n                <div id=\"recognitionResults\">\n                    <div class=\"info-item\">\n                        <span class=\"info-label\">Confidence Level:</span>\n                        <span class=\"info-value\" id=\"confidenceValue\">0%</span>\n                    </div>\n                    <div class=\"confidence-bar\">\n                        <div class=\"confidence-fill\" id=\"confidenceBar\" style=\"width: 0%\"></div>\n                    </div>\n                    <div class=\"info-item\">\n                        <span class=\"info-label\">Status:</span>\n                        <span class=\"info-value\" id=\"recognitionStatus\">Not attempted</span>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <script>\n        const video = document.getElementById('video');\n\n        // Access camera\n        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {\n            navigator.mediaDevices.getUserMedia({ video: true })\n                .then(stream => {\n                    video.srcObject = stream;\n                })\n                .catch(err => {\n                    console.error(\"Error accessing camera:\", err);\n                    alert(\"Error accessing camera. Please allow camera permissions.\");\n                });\n        }\n\n        function updateStatus(message, type) {\n            const indicator = document.getElementById('statusIndicator');\n            indicator.textContent = message;\n            indicator.className = `status-indicator status-${type}`;\n        }\n\n        async function captureForSignIn() {\n            const startTime = Date.now();\n            \n            try {\n                // Capture image from camera\n                const canvas = document.createElement('canvas');\n                const context = canvas.getContext('2d');\n                canvas.width = video.videoWidth;\n                canvas.height = video.videoHeight;\n                context.drawImage(video, 0, 0);\n                \n                // Convert to base64\n                const imageData = canvas.toDataURL('image/jpeg');\n                \n                // Update UI\n                updateStatus(\"Processing face...\", \"waiting\");\n                const button = document.querySelector('.btn');\n                button.textContent = \"PROCESSING...\";\n                button.disabled = true;\n                \n                // Send to Node-RED endpoint\n                const response = await fetch('/process-face', {\n                    method: 'POST',\n                    headers: {\n                        'Content-Type': 'application/json',\n                    },\n                    body: JSON.stringify({\n                        image: imageData\n                    })\n                });\n                \n                const result = await response.json();\n                \n                // **DEBUG: Log the complete response**\n                console.log(\"=== FULL API RESPONSE ===\");\n                console.log(\"Success:\", result.success);\n                console.log(\"Recognized:\", result.recognized);\n                console.log(\"Confidence:\", result.confidence);\n                console.log(\"User ID:\", result.user_id);\n                console.log(\"User Name:\", result.user_name);\n                console.log(\"User ST:\", result.user_st);\n                console.log(\"Grade:\", result.grade);\n                console.log(\"Class:\", result.class);\n                console.log(\"Last Scan:\", result.last_scan);\n                console.log(\"Avatar Color:\", result.avatar_color);\n                console.log(\"All keys:\", Object.keys(result));\n                console.log(\"=== END DEBUG ===\");\n                \n                // Update UI with results\n                if (result.success && result.recognized) {\n                    updateStatus(`Welcome ${result.user_name}!`, \"success\");\n                    \n                    // Update all fields\n                    document.getElementById('userSt').textContent = result.user_st || 'N/A';\n                    document.getElementById('userName').textContent = result.user_name || 'Unknown';\n                    document.getElementById('userGrade').textContent = result.grade || 'N/A';\n                    document.getElementById('userClass').textContent = result.class || 'N/A';\n                    document.getElementById('lastScan').textContent = result.last_scan || new Date().toLocaleString();\n                    \n                    // Update avatar\n                    const avatar = document.getElementById('userAvatar');\n                    avatar.textContent = result.user_name ? result.user_name.charAt(0).toUpperCase() : '?';\n                    avatar.style.background = result.avatar_color || '#3498db';\n                    \n                    // Update recognition results\n                    document.getElementById('confidenceValue').textContent = result.confidence + '%';\n                    document.getElementById('confidenceBar').style.width = result.confidence + '%';\n                    document.getElementById('recognitionStatus').textContent = 'Recognized';\n                    \n                } else {\n                    updateStatus(\"Face not recognized\", \"error\");\n                    \n                    // Reset fields for unknown user\n                    document.getElementById('userSt').textContent = 'Unknown';\n                    document.getElementById('userName').textContent = 'Unknown User';\n                    document.getElementById('userGrade').textContent = 'N/A';\n                    document.getElementById('userClass').textContent = 'N/A';\n                    document.getElementById('lastScan').textContent = new Date().toLocaleString();\n                    \n                    const avatar = document.getElementById('userAvatar');\n                    avatar.textContent = '?';\n                    avatar.style.background = '#e74c3c';\n                    \n                    document.getElementById('confidenceValue').textContent = '0%';\n                    document.getElementById('confidenceBar').style.width = '0%';\n                    document.getElementById('recognitionStatus').textContent = 'Not recognized';\n                }\n                \n            } catch (error) {\n                console.error('Error:', error);\n                updateStatus(\"Error processing face\", \"error\");\n            } finally {\n                const button = document.querySelector('.btn');\n                button.textContent = \"SIGN IN WITH FACE\";\n                button.disabled = false;\n            }\n        }\n\n        // Initialize with default state\n        updateStatus(\"Ready for face recognition\", \"waiting\");\n        \n        // Set initial values\n        document.getElementById('userSt').textContent = '-';\n        document.getElementById('userName').textContent = '-';\n        document.getElementById('userGrade').textContent = '-';\n        document.getElementById('userClass').textContent = '-';\n        document.getElementById('lastScan').textContent = '-';\n        document.getElementById('confidenceValue').textContent = '0%';\n        document.getElementById('confidenceBar').style.width = '0%';\n        document.getElementById('recognitionStatus').textContent = 'Not attempted';\n    </script>\n</body>\n</html>",
+        "output": "str",
+        "x": 380,
+        "y": 480,
+        "wires": [
+            [
+                "564378b5a54a7dd9"
+            ]
+        ]
+    },
+    {
+        "id": "2e757bbea3d9fe04",
+        "type": "function",
+        "z": "5d7f843896f5f03d",
+        "name": "function 5",
+        "func": "// Function 5 - Extract user_id\nnode.warn(\"=== FUNCTION 5 START ===\");\nnode.warn(\"Python response: \" + JSON.stringify(msg.payload));\n\n// Store the Python response\nmsg.pythonResponse = msg.payload;\n\nif (msg.payload && msg.payload.success && msg.payload.recognized) {\n    msg.user_id = msg.payload.user_id;\n    node.warn(\"✅ Python recognized: \" + msg.user_id);\n} else {\n    msg.user_id = \"unknown\";\n    node.warn(\"❌ Python did not recognize face\");\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 800,
+        "y": 320,
+        "wires": [
+            [
+                "e2681720968d7f27"
+            ]
+        ]
+    },
+    {
+        "id": "e2681720968d7f27",
+        "type": "function",
+        "z": "5d7f843896f5f03d",
+        "name": "function 6",
+        "func": "// Function 6 - User Database (DEBUG)\nnode.warn(\"=== FUNCTION 6 START ===\");\nnode.warn(\"Input user_id: \" + msg.user_id);\n\nconst userDatabase = {\n    \"kb\": {\n        \"user_id\": \"kb\",\n        \"user_name\": \"khaby lameM\",\n        \"user_st\": \"1234\",\n        \"grade\": \"11\",\n        \"class\" : \"5/1\"\n    },\n    \"kin\": {\n        \"user_id\": \"kin\",\n        \"user_name\": \"Kinda homeful\",\n        \"user_st\": \"6767\",\n        \"grade\": \"11\",\n        \"class\" : \"5/1\"\n    },\n    \"ryk\": {\n        \"user_id\": \"ryk\",\n        \"user_name\": \"Ryk Shards\",\n        \"user_st\": \"8686\",\n        \"grade\": \"11\",\n        \"class\" : \"5/1\"\n    }\n};\n\nconst user_id = msg.user_id;\n\nif (userDatabase[user_id]) {\n    msg.user_data = userDatabase[user_id];\n    msg.user_data.last_scan = new Date().toLocaleString();\n    msg.user_data.avatar_color = \"#3498db\";\n    node.warn(\"User found in database\");\n} else {\n    msg.user_data = {\n        user_id: \"unknown\",\n        user_name: \"Unknown User\",\n        user_st: \"N/A\",\n        grade: \"N/A\",\n        class: \"N/A\",\n        last_scan: new Date().toLocaleString(),\n        avatar_color: \"#95a5a6\"\n    };\n    node.warn(\"User NOT found in database\");\n}\n\nnode.warn(\"User data: \" + JSON.stringify(msg.user_data));\nnode.warn(\"=== FUNCTION 6 END ===\");\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1020,
+        "y": 320,
+        "wires": [
+            [
+                "236a70efe732231f"
+            ]
+        ]
+    },
+    {
+        "id": "b3ba5f7335ede612",
+        "type": "http in",
+        "z": "5d7f843896f5f03d",
+        "name": "",
+        "url": "/process-face",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 210,
+        "y": 740,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a9755ef46713a921",
+        "type": "function",
+        "z": "5d7f843896f5f03d",
+        "name": "function 7",
+        "func": "msg.payload = {\n    input: msg.req.body.image\n};\n\nmsg.url = \"http://localhost:5000/predict\";\nmsg.method = \"POST\";\nmsg.headers = {\n    'Content-Type': 'application/json'\n};\n\nconsole.log(\"Sending image to Python API\");\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 740,
+        "wires": [
+            [
+                "a6a9c712b12f2d07"
+            ]
+        ]
+    },
+    {
+        "id": "a6a9c712b12f2d07",
+        "type": "http request",
+        "z": "5d7f843896f5f03d",
+        "name": "",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://localhost:5000/predict",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 610,
+        "y": 740,
+        "wires": [
+            [
+                "29cbe6917a5342ea"
+            ]
+        ]
+    },
+    {
+        "id": "7f7fa19186d14ad5",
+        "type": "function",
+        "z": "5d7f843896f5f03d",
+        "name": "function 8",
+        "func": "var pythonResult = msg.payload;\n\nconsole.log(\"Python API response:\", pythonResult);\n\nif (pythonResult.success) {\n    msg.payload = {\n        success: true,\n        recognized: pythonResult.recognized,\n        confidence: pythonResult.confidence,\n        user_id: pythonResult.user_id,\n        user_name: pythonResult.user_name,\n        message: pythonResult.message || \n            (pythonResult.recognized ? \n                `${pythonResult.user_name}!` : \n                \"Face not recognized\")\n    };\n} else {\n    msg.payload = {\n        success: false,\n        recognized: false,\n        error: pythonResult.error,\n        message: \"Error processing face recognition\"\n    };\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1240,
+        "y": 740,
+        "wires": [
+            [
+                "13dcce0a927b3f38"
+            ]
+        ]
+    },
+    {
+        "id": "e286c4a15a628670",
+        "type": "http response",
+        "z": "5d7f843896f5f03d",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1430,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "29cbe6917a5342ea",
+        "type": "function",
+        "z": "5d7f843896f5f03d",
+        "name": "function 9",
+        "func": "// Initialize user database in global context\nif (!global.get('userDatabase')) {\n    global.set('userDatabase', {\n        \"kb\": {\n            \"user_id\": \"kb\",\n            \"user_name\": \"Khoo Ben\",\n            \"user_st\": \"2291\",\n            \"grade\": \"11\",\n            \"class\": \"Science A\",\n            \n        },\n        \"kin\": {\n            \"user_id\": \"kin\",\n            \"user_name\": \"Kin Seng\",\n            \"user_st\": \"6767\", \n            \"grade\": \"11\",\n            \n        },\n        \"ryk\": {\n            \"user_id\": \"ryk\",\n            \"user_name\": \"Ryan Koh\",\n            \"user_st\": \"8686\",\n            \"grade\": \"11\",\n            \n        }\n    });\n}\n\nconst userDatabase = global.get('userDatabase');\nconst user_id = msg.payload.user_id; // From face recognition\n\nif (userDatabase[user_id]) {\n    // Update last scan time\n    userDatabase[user_id].last_scan = new Date().toISOString();\n    global.set('userDatabase', userDatabase);\n    \n    // Return user data\n    msg.payload = {\n        success: true,\n        user_data: userDatabase[user_id]\n    };\n} else {\n    msg.payload = {\n        success: false,\n        error: \"User not found in database\"\n    };\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 820,
+        "y": 740,
+        "wires": [
+            [
+                "5b0f6acbf2d9da68"
+            ]
+        ]
+    },
+    {
+        "id": "5b0f6acbf2d9da68",
+        "type": "function",
+        "z": "5d7f843896f5f03d",
+        "name": "function 10",
+        "func": "// Combine Results Function\nif (msg.previousPayload.success && msg.previousPayload.recognized) {\n    msg.payload = {\n        success: true,\n        recognized: true,\n        confidence: msg.previousPayload.confidence,\n        // All user data from database\n        user_id: msg.user_data.user_id,\n        user_name: msg.user_data.user_name, \n        user_st: msg.user_data.user_st,\n        grade: msg.user_data.grade,\n        class: msg.user_data.class,\n        phone: msg.user_data.phone,\n        emergency_contact: msg.user_data.emergency_contact,\n        attendance: msg.user_data.attendance,\n        last_scan: msg.user_data.last_scan,\n        avatar_color: msg.user_data.avatar_color\n    };\n} else {\n    // Face not recognized\n    msg.payload = {\n        success: true,\n        recognized: false,\n        confidence: msg.previousPayload.confidence || 0\n    };\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1040,
+        "y": 740,
+        "wires": [
+            [
+                "7f7fa19186d14ad5"
+            ]
+        ]
+    },
+    {
+        "id": "13dcce0a927b3f38",
+        "type": "debug",
+        "z": "5d7f843896f5f03d",
+        "name": "debug 3",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1440,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "8392ab65f9460151",
+        "type": "debug",
+        "z": "5d7f843896f5f03d",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 900,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "6ef1e3e3ea62d6a6",
+        "type": "debug",
+        "z": "5d7f843896f5f03d",
+        "name": "debug 6",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1420,
+        "y": 400,
+        "wires": []
+    }
+]

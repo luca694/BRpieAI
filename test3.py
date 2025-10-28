@@ -50,7 +50,6 @@ print(f"Training samples: {len(X_train)}")
 print(f"Test samples: {len(X_test)}")
 print(f"Number of classes: {num_classes}")
 
-# Build model
 model = Sequential([
     Conv2D(8, (3, 3), activation="relu", input_shape=(100, 100, 1)),
     BatchNormalization(),
@@ -69,7 +68,7 @@ model = Sequential([
     
     Flatten(),
     Dense(32, activation="relu", kernel_regularizer=l2(0.01)),
-    Dropout(0.5),
+    Dropout(0.4),
     Dense(num_classes, activation="softmax")
 ])
 
