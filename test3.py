@@ -90,7 +90,7 @@ datagen = ImageDataGenerator(
 # Callbacks
 early_stopping = EarlyStopping(
     monitor='val_loss',
-    patience=20,
+    patience=24,
     restore_best_weights=True,
     verbose=1
 )
@@ -127,7 +127,7 @@ print(f"Training Loss: {train_loss:.4f}")
 print(f"Test Loss: {test_loss:.4f}")
 
 # Overfitting check
-if train_accuracy > 0.95 and test_accuracy < 0.7:
+if train_accuracy > 0.9 and test_accuracy < 0.7:
     print("⚠️  WARNING: Model is overfitting!")
 elif test_accuracy > 0.85:
     print("✅ Good performance!")
@@ -150,8 +150,8 @@ print("Confusion Matrix:")
 print(confusion_matrix(y_true_classes, y_pred_classes))
 
 # Save model if performance is reasonable
-if test_accuracy > 0.85:
-    model.save("model001.h5")
+if test_accuracy > 0.8:
+    model.save("model002.h5")
     print("✅ Model saved successfully!")
 else:
     print("❌ Model performance too poor to save.")
