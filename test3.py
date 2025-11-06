@@ -90,7 +90,7 @@ datagen = ImageDataGenerator(
 # Callbacks
 early_stopping = EarlyStopping(
     monitor='val_loss',
-    patience=24,
+    patience=20,
     restore_best_weights=True,
     verbose=1
 )

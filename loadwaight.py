@@ -4,7 +4,7 @@ import json
 import pickle
 
 # Load your model
-model = tf.keras.models.load_model('model002.h5')
+model = tf.keras.models.load_model('model001.h5')
 
 # 1. Extract all weights and biases
 weights_dict = {}
