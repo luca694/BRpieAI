@@ -1,0 +1,34 @@
+[
+    {
+        "id": "4a8f721adf4bc101",
+        "type": "mysql",
+        "z": "5d7f843896f5f03d",
+        "mydb": "6ee25a52a96e36a7",
+        "name": "",
+        "x": 1090,
+        "y": 320,
+        "wires": [
+            [
+                "236a70efe732231f"
+            ]
+        ]
+    },
+    {
+        "id": "6ee25a52a96e36a7",
+        "type": "MySQLdatabase",
+        "name": "",
+        "host": "165.101.65.211",
+        "port": "3306",
+        "db": "school_db",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
+        "id": "7f89adf4e5dd92ca",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-node-mysql": "2.0.0"
+        }
+    }
+]
